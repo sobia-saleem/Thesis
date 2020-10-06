@@ -1,0 +1,26 @@
+% This code counts all the 1's in anova test result to generate a
+% percentage score for each feature against each transformation.
+
+formatSpec1 = '%f %f %f %f %f %f %f %f %f %f %f %f  %f %f %f %f %f %f %f %f %f %f %f ';
+formatSpec2 = '%4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\n';
+dim = 2;
+s = 0.5;
+ nSamples = s* 1000* dim^2;
+func = 10;
+reruns = 50;
+ sampling = 'unifrnd';
+featureNames = {'dispersion','fdc','iC','iP','iS','LSmean','LSvar','LSentropy','Rsq_L','Rsq_Q','KR','SK'};
+sizeA = [10 inf];
+H = zeros(1,12);
+
+  for ind = 1:12
+
+        feature= featureNames{ind};
+        Filename1=strcat('Anova_result_',feature,'_',sampling,'_SP2RT_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID1 = fopen(Filename1,'r');
+        data1 = fscanf(fileID1,formatSpec1,sizeA);
+        data  =data1';
+        fclose(fileID1);
+        H(ind) = sum(sum(data)); 
+   
+  end
