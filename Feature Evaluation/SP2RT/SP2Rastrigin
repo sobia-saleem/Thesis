@@ -1,0 +1,45 @@
+
+dim = 2;
+bounds = [-5,5];
+precision = 10^(-3);
+for runs = 1:50
+
+dispersionPrecision = 0.05; % Select best 5%
+nSamples = 500* dim^2;
+nKernel = 1000;
+Filename=strcat('BBOB_features_unifrnd_SP2RT_',num2str(dim),'_',num2str(nSamples),'_',num2str(runs),'.txt');
+fileID = fopen(Filename,'w');
+fprintf(fileID,'%6s\t %6s\t %6s\t %6s\t %6s\t %6s\t  %6s\t %6s\t %6s\t %6s\t %6s\t %6s\t %6s\n',...
+'Func','disp','fdc','iC,','iP','iS','LS(Mean)','LS(Var)','LS(Entropy)','Rsq_L','Rsq_Q','k','sk');
+
+    for b = 0:10
+        x = unifrnd(-5,5,nSamples,dim);  % uniform data 
+        x1 = x';        
+        f = Rastrigin(x1,b);
+        f = f'; 
+      %stem(x,f)
+        gs = zeros(1,dim);
+
+
+%plot3(f,x(:,1),x(:,2))
+        disperse = dispersion(x, f, dispersionPrecision * nSamples);
+        [iC, iP, iS] = informationContent(f);
+        rStats = lengthScale(x, f, nKernel); % Length scale statistics
+        rMean = rStats.mean;
+        rVar = rStats.var;
+        rEntropy = rStats.entropy;   
+        fdc = fitnessDistanceCorrelation(x, f, gs);% Fitness distance correlation       
+        Rsq_L = linear_coeff(x,f);
+        Rsq_Q = quad_coeff(x,f);
+        k = kurtosis(f);
+        sk = skewness(f);
+ 
+        formatSpec = '%2.2f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\n';
+        fprintf(fileID,formatSpec,b,disperse,fdc,iC,iP,iS,rMean,rVar,rEntropy,Rsq_L,Rsq_Q,k,sk);
+    end
+    fclose(fileID);
+end 
+
+            
+            
+
