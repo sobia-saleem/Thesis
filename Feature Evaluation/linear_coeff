@@ -1,0 +1,4 @@
+function [ rsq_adj] = linear_coeff( x, y )
+lm = fitlm(x,y,'linear');
+rsq_adj = lm.Rsquared.Adjusted;
+end
