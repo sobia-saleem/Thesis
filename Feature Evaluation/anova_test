@@ -1,0 +1,60 @@
+% This code applies the ANOVA test on sets of feature values. 
+% It generates files containing P values of each test.
+% It generates the anova result file containg 1's if the P values are <0.05
+
+
+
+formatSpec1 = '%f %f %f %f %f %f %f %f %f %f %f %f  %f %f %f %f %f %f %f %f %f %f %f ';
+formatSpec2 = '%4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\n';
+dim = 2;
+s = 0.5;
+ nSamples = s* 1000* dim^2;
+func = 10;
+reruns = 50;
+ sampling = 'unifrnd';
+featureNames = {'dispersion','fdc','iC','iP','iS','LSmean','LSvar','LSentropy','Rsq_L','Rsq_Q','KR','SK'};
+sizeA = [func inf];
+H = zeros(1,12);
+MC1 = zeros(45,12);
+tmat = zeros(9,10);
+  for ind = 1:12
+
+        feature= featureNames{ind};
+       
+        Filename1=strcat(feature,'_',sampling,'_SP2RT_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID1 = fopen(Filename1,'r');
+        data1 = fscanf(fileID1,formatSpec1,sizeA);
+        data  =data1';
+        fclose(fileID1);
+     
+        [p,tbl,stats] = anova1(data);
+%          for i = 1:9
+%             %new = repmat((i-1),size(data,1),1);
+%             new1 = data(:,i);
+%             new2 = data(:,i+1);
+%             [h,p,ci,stats] = ttest2(new1,new2);
+%             tsum = tsum+h;
+%          end
+          mc = multcompare(stats);
+          for i = 1:45
+          tmat(mc(i,1),mc(i,2)) = mc(i,6)<0.05; 
+          end
+        Filename2=strcat('Anova_result_',feature,'_',sampling,'_SP2RT_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID2 = fopen(Filename2,'w');
+        fprintf(fileID2,formatSpec2,tmat'); 
+        fclose(fileID1);
+         MC1(:,ind) = mc(:,6);
+         for i = 1:45
+         pmat(mc(i,1),mc(i,2)) = mc(i,6); 
+         end
+        Filename3=strcat('Anova_result_P_value',feature,'_',sampling,'_RT2flat_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID3 = fopen(Filename3,'w');
+        fprintf(fileID3,formatSpec2,pmat'); 
+        fclose(fileID3);
+        
+         MC1(:,ind) = mc(:,6);
+
+         MC2 = (MC1<0.05);
+         
+   
+  end
