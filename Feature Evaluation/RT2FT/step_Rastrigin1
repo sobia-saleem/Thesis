@@ -1,0 +1,15 @@
+%This function generates a combination of rastrigin and flat function. 
+%'s' should be bounded in [-b,b], the bounds of variables.
+% x is a matrix of size = [number of samples x dimensions]
+
+function z = step_Rastrigin1(x,s)
+DIM = size(x,1);
+
+z1 = 10 * (DIM - sum(cos(2*pi*x), 1)) + sum(x.^2, 1);
+
+xsq = x.^2;
+xsum = sum(xsq,1);
+z1(xsum <=DIM*s^2)= 1;  % flat region expands from center to boundary
+z=z1;                
+
+end
