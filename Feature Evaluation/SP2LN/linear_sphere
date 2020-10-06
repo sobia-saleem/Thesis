@@ -1,0 +1,18 @@
+function [Fval] = linear_sphere(x,b)
+% linear slope 
+DIM = size(x,1);
+Xopt = -5;
+alpha = 100;  
+scales = - sign(Xopt) .* sqrt(alpha).^linspace(0, 1, DIM)'
+Ftrue = scales' * x;
+z1 = Ftrue;
+
+xsq = abs(x).^2;
+xsum = sum(xsq,1);
+y = find(xsum <=DIM*b^2);
+z1(y) = sum(x(:,y).^2,1);
+
+% Sphere starts appearing from the center towards boundary.                
+ Fval = z1;
+
+end 
