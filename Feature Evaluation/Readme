@@ -1,0 +1,11 @@
+
+Step1: generate feature values for one problem transformation
+Step2: organize values of individual features in seperate files using feature_recalc.m
+step3: apply ANOVA test using anova_test.m code.
+step4: apply Aova_value to get the percentage score for each feature.
+
+The code feature_recalc.m generates files for individual features(12). 
+Each file contains feature values (50 individual runs) calculated on one problem transformation.
+
+The code for calculating feature values is copied from 
+https://github.com/RachM/thesis/tree/master/COMMON
