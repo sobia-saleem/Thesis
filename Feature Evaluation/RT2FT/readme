@@ -1,3 +1,3 @@
-The code Rastrigin2flat.m generates 50 files containing feature values for problems changing from rastrigin to flat. 
+The code Rastrigin2flat.m generates 50 files containing feature values for problems changing from rastrigin to flat in 50 reruns. 
 Each file has 12 columns, one for each feature values.
 The problems during transformation are generated using step_Rastrigin1.m function. 
