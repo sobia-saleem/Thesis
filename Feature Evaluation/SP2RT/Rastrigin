@@ -1,0 +1,9 @@
+% The term A controls the amplitude of ripples in the function.
+
+function z = Rastrigin(x,A)
+DIM = size(x,1);
+z = A * (DIM - sum(cos(2*pi*x), 1)) + sum(x.^2, 1);
+
+end
+
+
