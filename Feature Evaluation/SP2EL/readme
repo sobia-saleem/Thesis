@@ -1,0 +1,3 @@
+The code SP2Ellipse.m generates 50 files containing feature values for problems changing from sphere to ellipse. 
+Each file has 12 columns, one for each feature values.
+The problems during transformation are generated using ellipse1.m function. 
