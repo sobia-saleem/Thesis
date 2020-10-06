@@ -1,0 +1,169 @@
+%The code feature_recalc.m generates files for individual features(12). 
+%Each file contains feature values (50 individual runs) calculated on one problem transformation.
+
+
+formatSpec = '%124s %124s %124s %124s %124s %124s %124s %124s %124s %124s %124s %124s %124s  ';
+%formatSpec1 = '%4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f \n';
+formatSpec1 = '%4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\t %4.4f\n';
+%formatSpec1 = '%4.4f\n';
+
+func = 10; % functions in transformation
+reruns = 50;
+dispersion = zeros(reruns,func);
+fitnessdc = zeros(reruns,func);
+LSMean = zeros(reruns,func);
+LSVar = zeros(reruns,func);
+LSEntropy = zeros(reruns,func);
+IC = zeros(reruns,func);
+IP = zeros(reruns,func);
+IS = zeros(reruns,func);
+Rsq_L = zeros(reruns,func);
+Rsq_Q = zeros(reruns,func);
+SK = zeros(reruns,func);
+KR = zeros(reruns,func);
+
+sampling = 'unifrnd';
+
+for  a = [10]
+    for s = [0.5]
+        dim = a;
+        nSamples = s*1000 * dim^2;
+        Filename1=strcat('dispersion_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID1 = fopen(Filename1,'w');
+        Filename2=strcat('fdc_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID2 = fopen(Filename2,'w');
+        Filename3=strcat('LSmean_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID3 = fopen(Filename3,'w');
+        Filename4=strcat('LSvar_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID4 = fopen(Filename4,'w');
+        Filename5=strcat('LSentropy_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID5 = fopen(Filename5,'w');
+        Filename6=strcat('iC_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID6 = fopen(Filename6,'w');
+        Filename7=strcat('iP_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID7 = fopen(Filename7,'w');
+        Filename8=strcat('iS_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID8 = fopen(Filename8,'w');
+        Filename9=strcat('Rsq_L_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID9 = fopen(Filename9,'w');
+        Filename10=strcat('Rsq_Q_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID10 = fopen(Filename10,'w');
+        Filename11=strcat('KR_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID11 = fopen(Filename11,'w');
+        Filename12=strcat('SK_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'.txt');
+        fileID12 = fopen(Filename12,'w');
+       
+        
+
+sizeA = [func 12];
+for runs = 1:reruns
+Filename=strcat('BBOB_features_',sampling,'_SP2Ellipse_',num2str(dim),'_',num2str(nSamples),'_',num2str(runs),'.txt');
+%Filename=strcat('BBOB_features_unifrnd_',num2str(dim),'_',num2str(nSamples),'.txt');
+fid1 = fopen(Filename , 'r');
+fid = textscan(fid1,formatSpec);
+%data1 = fscanf(fid,formatSpec,sizeA);
+disp = fid(1,2);
+fdc = fid(1,3);
+iC = fid(1,4);
+iP = fid(1,5);
+iS = fid(1,6);
+LSmean = fid(1,7);
+LSvar = fid(1,8);
+LSentropy = fid(1,9);
+Rsq_l = fid(1,10);
+Rsq_q = fid(1,11);
+kr = fid(1,12);
+sk = fid(1,13);
+
+
+z1 = disp{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+dispersion(runs,:) = nv1;
+
+z1 = fdc{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+fitnessdc(runs,:) = nv1;
+
+z1 = LSmean{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+LSMean(runs,:) = nv1;
+
+z1 = LSvar{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+LSVar(runs,:) = nv1;
+
+z1 = LSentropy{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+LSEntropy(runs,:) = nv1;
+
+z1 = iC{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+IC(runs,:) = nv1;
+
+z1 = iP{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+IP(runs,:) = nv1;
+
+z1 = iS{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+IS(runs,:) = nv1;
+
+z1 = Rsq_l{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+Rsq_L(runs,:) = nv1;
+
+z1 = Rsq_q{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+Rsq_Q(runs,:) = nv1;
+
+z1 = kr{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+KR(runs,:) = nv1;
+
+z1 = sk{1}(2:12);
+nv1 = cellfun(@str2num, z1);
+nv1 = nv1';
+SK(runs,:) = nv1;
+
+fclose(fid1);
+
+end
+fprintf(fileID1,formatSpec1,dispersion');
+fclose(fileID1);
+fprintf(fileID2,formatSpec1,fitnessdc');
+fclose(fileID2);
+fprintf(fileID3,formatSpec1,LSMean');
+fclose(fileID3);
+fprintf(fileID4,formatSpec1,LSVar');
+fclose(fileID4);
+fprintf(fileID5,formatSpec1,LSEntropy');
+fclose(fileID5);
+fprintf(fileID6,formatSpec1,IC');
+fclose(fileID6);
+fprintf(fileID7,formatSpec1,IP');
+fclose(fileID7);
+fprintf(fileID8,formatSpec1,IS');
+fclose(fileID8);
+fprintf(fileID9,formatSpec1,Rsq_L');
+fclose(fileID9);
+fprintf(fileID10,formatSpec1,Rsq_Q');
+fclose(fileID10);
+fprintf(fileID11,formatSpec1,KR');
+fclose(fileID11);
+fprintf(fileID12,formatSpec1,SK');
+fclose(fileID12);
+
+    end
+    
+end
